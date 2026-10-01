@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>for trisha ♡</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; min-height: 100%; }
+  body {
+    font-family: "Trebuchet MS", "Arial Rounded MT Bold", system-ui, sans-serif;
+    background: #fff8d9;
+    color: #5d4b36;
+    overflow-x: hidden;
+  }
+  button { font: inherit; border: 0; cursor: pointer; }
+
+  .screen {
+    min-height: 100svh;
+    width: 100%;
+    display: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .screen.active { display: flex; }
+
+  /* ---------- INTRO ---------- */
+  #intro {
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255,255,255,.8) 0 5px, transparent 6px),
+      linear-gradient(180deg, #fff9d9 0%, #fff0a8 100%);
+  }
+  .intro-card {
+    width: min(100%, 390px);
+    text-align: center;
+    animation: floatCard 3s ease-in-out infinite;
+  }
+  .tiny-star {
+    position: absolute;
+    color: #f2c84b;
+    font-size: 22px;
+    animation: twinkle 2s ease-in-out infinite;
+  }
+  .star1 { top: 9%; left: 14%; }
+  .star2 { top: 17%; right: 13%; animation-delay: .6s; }
+  .star3 { bottom: 18%; left: 10%; animation-delay: 1s; }
+  .star4 { bottom: 12%; right: 16%; animation-delay: 1.4s; }
+
+  .seal {
+    width: 150px;
+    height: 126px;
+    margin: 0 auto 18px;
+    position: relative;
+    animation: sealBounce 1.8s ease-in-out infinite;
+  }
+  .seal-body {
+    width: 122px; height: 92px;
+    background: #f59db7;
+    border: 4px solid #b8667d;
+    border-radius: 55% 55% 48% 48%;
+    position: absolute; left: 14px; top: 24px;
+    box-shadow: 0 10px 0 rgba(184,102,125,.12);
+  }
+  .seal-head {
+    width: 96px; height: 82px;
+    background: #f7a9c0;
+    border: 4px solid #b8667d;
+    border-radius: 50%;
+    position: absolute; left: 27px; top: 3px;
+  }
+  .seal-eye { width: 8px; height: 8px; background:#533d42; border-radius:50%; position:absolute; top:35px; }
+  .seal-eye.left { left:28px; } .seal-eye.right { right:28px; }
+  .seal-nose {
+    width: 14px; height: 10px; background:#6d4853;
+    border-radius: 50%; position:absolute; top:48px; left:41px;
+  }
+  .seal-nose:after {
+    content:""; width: 18px; height: 8px;
+    border-bottom: 3px solid #6d4853;
+    border-radius: 0 0 50% 50%;
+    position:absolute; left:-2px; top:5px;
+  }
+  .flipper { width:38px; height:18px; background:#f59db7; border:4px solid #b8667d; border-radius:50%; position:absolute; top:65px; }
+  .flipper.left { left:-2px; transform:rotate(25deg); } .flipper.right { right:-2px; transform:rotate(-25deg); }
+
+  h1 { color:#6b5639; font-size: clamp(30px, 9vw, 42px); margin: 0 0 10px; }
+  .intro-card p { font-size: 16px; line-height: 1.55; margin: 8px auto; max-width: 330px; }
+  .small-note { color:#94784f; font-size: 13px !important; }
+
+  .main-btn {
+    margin-top: 18px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: #f4ca4e;
+    color:#5d4b36;
+    font-weight: 800;
+    box-shadow: 0 7px 0 #d5aa35;
+    transition: .15s;
+  }
+  .main-btn:active { transform:translateY(5px); box-shadow:0 2px 0 #d5aa35; }
+
+  /* ---------- GAME ---------- */
+  #game {
+    background: linear-gradient(180deg, #fff5b9 0%, #fffbe8 68%, #cceaa1 68%, #a9d27e 100%);
+    touch-action: none;
+  }
+  .game-top { position:absolute; top:18px; left:18px; right:18px; z-index:5; display:flex; justify-content:space-between; align-items:center; }
+  .pill { background:rgba(255,255,255,.78); padding:8px 13px; border-radius:999px; font-weight:800; box-shadow:0 4px 12px rgba(100,80,20,.08); }
+  .game-title { position:absolute; top:70px; left:20px; right:20px; text-align:center; z-index:3; }
+  .game-title h2 { margin:0; font-size:24px; color:#6a5635; }
+  .game-title p { margin:6px 0; font-size:13px; color:#8b7047; }
+
+  .grass { position:absolute; bottom:0; left:0; right:0; height:32%; background:#a9d27e; }
+  .grass:before {
+    content:"";
+    position:absolute; top:-15px; left:0; right:0; height:28px;
+    background: repeating-linear-gradient(75deg, transparent 0 12px, #8fc269 12px 15px);
+  }
+
+  .player {
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%);
+    width:92px; height:75px; z-index:4; transition:left .08s linear;
+  }
+  .mini-seal { width:70px; height:52px; background:#f59db7; border:3px solid #b8667d; border-radius:50%; position:absolute; left:11px; bottom:0; }
+  .mini-seal:before { content:""; width:54px; height:49px; background:#f7a9c0; border:3px solid #b8667d; border-radius:50%; position:absolute; left:5px; top:-31px; }
+  .mini-seal:after { content:"• ᴗ •"; white-space:pre; color:#6d4853; font-size:13px; position:absolute; left:16px; top:-15px; z-index:2; }
+  .player .flipper { width:25px; height:12px; top:26px; border-width:3px; }
+  .player .flipper.left { left:-5px; } .player .flipper.right { right:-5px; }
+
+  .envelope {
+    position:absolute; width:48px; height:34px; background:#f5cf50;
+    border:3px solid #b68e25; border-radius:6px; z-index:3;
+    box-shadow:0 5px 10px rgba(130,100,20,.12);
+  }
+  .envelope:before, .envelope:after {
+    content:""; position:absolute; width:29px; height:3px; background:#c49a2f; top:13px;
+  }
+  .envelope:before { left:1px; transform:rotate(30deg); }
+  .envelope:after { right:1px; transform:rotate(-30deg); }
+  .catch-text { position:absolute; pointer-events:none; color:#8a6b26; font-weight:900; animation: pop .6s forwards; z-index:10; }
+
+  .game-message {
+    position:absolute; left:20px; right:20px; bottom:10%; text-align:center;
+    font-weight:800; color:#667548; font-size:13px; z-index:5;
+  }
+
+  /* ---------- PASSWORD ---------- */
+  #password { align-items:center; justify-content:center; background:linear-gradient(180deg,#fff8d7,#fff0a1); padding:25px 18px; }
+  .mail-wrap { width:min(100%,390px); text-align:center; }
+  .floating-mail { width:110px; height:78px; background:#f4ca4e; border:4px solid #b58b25; border-radius:10px; margin:0 auto 22px; position:relative; animation: mailFloat 2.5s ease-in-out infinite; }
+  .floating-mail:before { content:""; position:absolute; left:10px; right:10px; top:9px; height:44px; background:#f8d96b; clip-path:polygon(0 0,50% 70%,100% 0,100% 16%,50% 88%,0 16%); }
+  .mail-wrap h2 { font-size:24px; margin:8px 0; }
+  .mail-wrap p { line-height:1.5; color:#8a704a; }
+  .code-input { width:180px; text-align:center; letter-spacing:10px; font-size:25px; padding:13px 8px; border-radius:14px; border:3px solid #edc54e; outline:none; background:#fffdf0; color:#5c4a33; }
+  .hint { font-size:13px !important; margin:12px 0 6px; }
+  .error { color:#d66a7f; min-height:22px; font-weight:800; font-size:13px; }
+
+  /* ---------- LETTER ---------- */
+  #letter { align-items:center; justify-content:center; background:radial-gradient(circle at top,#fffbdc,#f9e58e); padding:28px 16px; }
+  .letter-area { width:min(100%,410px); max-height:92svh; overflow:auto; padding:8px 2px 25px; }
+  .paper {
+    background:#fffdf4; border:2px solid #eadb9a; border-radius:14px;
+    padding:25px 20px 22px; box-shadow:0 15px 35px rgba(126,95,30,.14);
+    transform-origin:top center; animation: paperOpen .9s cubic-bezier(.2,.8,.2,1);
+    position:relative;
+  }
+  .paper:before { content:"♡"; position:absolute; right:17px; top:10px; color:#f19ab2; font-size:24px; }
+  .paper h2 { margin:0 0 16px; color:#c5798e; font-size:23px; }
+  .paper p { font-family:Georgia,serif; font-size:15px; line-height:1.72; margin:0 0 14px; color:#5d5143; }
+  .paper .sign { text-align:right; font-family:Georgia,serif; color:#b56d82; font-weight:bold; }
+  .read-btn { display:block; margin:20px auto 0; padding:13px 24px; background:#f4ca4e; border-radius:999px; color:#5c4932; font-weight:900; box-shadow:0 6px 0 #d5aa35; }
+  .read-btn:active { transform:translateY(4px); box-shadow:0 2px 0 #d5aa35; }
+
+  .heart { position:fixed; pointer-events:none; z-index:100; animation:heartFly 1.7s ease-out forwards; font-size:22px; }
+  /* ---------- GIFT ---------- */
+  #gift { align-items:center; justify-content:center; background:linear-gradient(180deg,#fff8d6,#fff0a4); padding:25px 16px; text-align:center; }
+  .bouquet { position:relative; width:220px; height:245px; margin:0 auto 5px; animation:bouquetIn 1.3s cubic-bezier(.2,.9,.2,1); }
+  .flower { position:absolute; width:50px; height:50px; border-radius:50%; background:#f6a3b8; box-shadow:0 0 0 7px #ffd6df; }
+  .flower:after { content:""; width:18px; height:18px; border-radius:50%; background:#f4ca4e; position:absolute; left:16px; top:16px; }
+  .f1{left:35px;top:35px}.f2{left:92px;top:20px}.f3{left:139px;top:52px}.f4{left:68px;top:76px}.f5{left:118px;top:91px}
+  .stem { position:absolute; width:7px; height:125px; background:#78a85e; border-radius:9px; bottom:25px; left:104px; transform:rotate(-10deg); }
+  .stem2 { left:135px; height:115px; transform:rotate(16deg); }
+  .stem3 { left:78px; height:118px; transform:rotate(-25deg); }
+  .wrap { position:absolute; left:55px; bottom:0; width:120px; height:90px; background:#f4ca4e; clip-path:polygon(10% 0,90% 0,100% 100%,0 100%); border-radius:0 0 15px 15px; }
+  .gift h2 { font-size:28px; color:#b66e82; margin:0 0 8px; }
+  .gift p { line-height:1.6; color:#7b6746; max-width:350px; margin:0 auto; }
+
+  .love-rain { position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:20; }
+  .i-love-you { position:absolute; font-weight:900; color:#d56f89; font-size:14px; white-space:nowrap; animation:flyAcross linear forwards; }
+  .final-card { margin:25px auto 0; width:min(100%,370px); background:rgba(255,255,255,.7); border:2px dashed #e4c75e; border-radius:20px; padding:18px; animation:fadeUp .9s ease .7s both; }
+  .final-card button { margin-top:12px; padding:11px 19px; border-radius:999px; background:#f6a8ba; color:white; font-weight:900; }
+
+  @keyframes floatCard { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  @keyframes sealBounce { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-9px) rotate(2deg)} }
+  @keyframes twinkle { 0%,100%{opacity:.35;transform:scale(.8)} 50%{opacity:1;transform:scale(1.2)} }
+  @keyframes mailFloat { 0%,100%{transform:translateY(0) rotate(-2deg)} 50%{transform:translateY(-10px) rotate(2deg)} }
+  @keyframes paperOpen { 0%{transform:perspective(700px) rotateX(-85deg) scale(.7);opacity:0} 100%{transform:perspective(700px) rotateX(0) scale(1);opacity:1} }
+  @keyframes heartFly { 0%{transform:translate(0,0) scale(.4) rotate(0);opacity:0} 15%{opacity:1} 100%{transform:translate(var(--x),var(--y)) scale(1.15) rotate(var(--r));opacity:0} }
+  @keyframes bouquetIn { 0%{transform:translateY(180px) scale(.2) rotate(-12deg);opacity:0} 70%{transform:translateY(-12px) scale(1.06) rotate(3deg)} 100%{transform:translateY(0) scale(1) rotate(0);opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+  @keyframes flyAcross { from{transform:translateX(-120px) rotate(-8deg);opacity:0} 12%{opacity:1} to{transform:translateX(120vw) rotate(12deg);opacity:0} }
+  @keyframes pop { from{transform:translateY(0) scale(.6);opacity:1} to{transform:translateY(-35px) scale(1.1);opacity:0} }
+
+  @media (min-width:600px) {
+    body { background:#e9e2c5; }
+    .screen { max-width:430px; margin:0 auto; box-shadow:0 0 50px rgba(80,60,20,.15); }
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<section id="intro" class="screen active">
+  <span class="tiny-star star1">✦</span><span class="tiny-star star2">✧</span>
+  <span class="tiny-star star3">✦</span><span class="tiny-star star4">♡</span>
+  <div class="intro-card">
+    <div class="seal" aria-label="pink seal named Xia">
+      <div class="seal-head"><span class="seal-eye left"></span><span class="seal-eye right"></span><span class="seal-nose"></span></div>
+      <div class="seal-body"></div>
+      <div class="flipper left"></div><div class="flipper right"></div>
+    </div>
+    <h1>hi, trisha! ♡</h1>
+    <p>xia has a tiny little surprise for you</p>
+    <p class="small-note">but first, you'll have to catch the envelopes.</p>
+    <button class="main-btn" onclick="startGame()">okay, let's play po!</button>
+  </div>
+</section>
+
+<!-- GAME -->
+<section id="game" class="screen">
+  <div class="game-top">
+    <div class="pill">✉ caught: <span id="score">0</span>/8</div>
+    <div class="pill">♡ xia</div>
+  </div>
+  <div class="game-title">
+    <h2>catch the envelopes!</h2>
+    <p>move xia left & right and catch them all ✉</p>
+  </div>
+  <div id="gameField"></div>
+  <div class="grass"></div>
+  <div class="player" id="player">
+    <div class="mini-seal"></div>
+    <div class="flipper left"></div><div class="flipper right"></div>
+  </div>
+  <div class="game-message">drag your finger anywhere to move xia ♡</div>
+</section>
+
+<!-- PASSWORD -->
+<section id="password" class="screen">
+  <div class="mail-wrap">
+    <div class="floating-mail"></div>
+    <h2>xia gave you this ✉</h2>
+    <p>guess the password to open your little surprise.</p>
+    <input id="codeInput" class="code-input" type="tel" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="4 digit password">
+    <p class="hint">hint: your baby's birthdate, except the year ♡ 4 digit</p>
+    <div id="error" class="error"></div>
+    <button class="main-btn" onclick="checkCode()">open it ♡</button>
+  </div>
+</section>
+
+<!-- LETTER -->
+<section id="letter" class="screen">
+  <div class="letter-area">
+    <div class="paper">
+      <h2>a love letter for you ♡</h2>
+
+      <p>hi, trisha. eh this might be corny hihi, but happy gf day (even tho we're not together pa) i just want to let you know na i love you, mahal kita, saranghae. uhm, yes. i just want you to know that youre the only one i love, theres no one else na. yes, i love you very much. i mean it talaga.</p>
+
+      <p>i might not show it that much kasi i honestly dont know how to express my feelings properly, and sometimes i dont know how to act around you either hhsh. pero im making this website for you para at least may way ako to tell you what i cant always say directly.</p>
+
+      <p>i dont expect anything from you, and you dont have to feel pressured or anything. i just wanted you to know because i think you deserve to know it. maybe its a little random, maybe its a little corny, but thats okay HAHAHA. i just wanted to do something cute for you, and this website felt like a fun way to say everything.</p>
+
+      <p>youre someone i genuinely care about, and even if youre only courting me, youre still very special to me. i appreciate your presence, your little habits, the way you talk, and just you being you. i dont really know how to explain it without sounding cheesy, so i'll just say it simply: i love you, trisha. thats it. no complicated explanation.</p>
+
+      <p>so if youre reading this right now, hi. surprise? 😭 i hope this little website makes you smile kahit konti. i made this specifically for you, so please appreciate the effort HAHAHA. i love you, always remember that. ♡ happy gf day!</p>
+
+      <p class="sign">— xia seal ♡</p>
+      <button class="read-btn" onclick="finishLetter()">done reading it? ♡</button>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section id="gift" class="screen">
+  <div class="love-rain" id="loveRain"></div>
+  <div>
+    <div class="bouquet">
+      <div class="stem"></div><div class="stem stem2"></div><div class="stem stem3"></div>
+      <div class="flower f1"></div><div class="flower f2"></div><div class="flower f3"></div>
+      <div class="flower f4"></div><div class="flower f5"></div>
+      <div class="wrap"></div>
+    </div>
+    <h2>one more thing...</h2>
+    <p>xia brought you some flowers because u deserve a tiny bouquet after making it this far.</p>
+
+    <div class="final-card">
+      <strong>100 little reminders</strong>
+      <p>if you ever forget, here's a whole sky full of them:</p>
+      <button onclick="moreLove()">make them fly again ✦</button>
+    </div>
+
+    <button class="main-btn" onclick="restart()">play it again</button>
+  </div>
+</section>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const screens = ["intro","game","password","letter","gift"];
+  let score = 0;
+  let envelopes = [];
+  let gameRunning = false;
+  let spawnTimer;
+
+  function show(id) {
+    screens.forEach(s => $(s).classList.remove("active"));
+    $(id).classList.add("active");
+  }
+
+  function startGame() {
+    show("game");
+    score = 0;
+    $("score").textContent = score;
+    $("gameField").innerHTML = "";
+    envelopes = [];
+    gameRunning = true;
+    spawnTimer = setInterval(spawnEnvelope, 700);
+    for(let i=0;i<2;i++) setTimeout(spawnEnvelope, i*350);
+  }
+
+  function spawnEnvelope() {
+    if (!gameRunning) return;
+    const field = $("gameField");
+    const env = document.createElement("div");
+    env.className = "envelope";
+    const maxX = Math.max(15, window.innerWidth - 63);
+    env.style.left = (15 + Math.random() * (maxX - 15)) + "px";
+    env.style.top = "-45px";
+    field.appendChild(env);
+
+    let y = -45;
+    const speed = 2.2 + Math.random() * 1.6;
+    const item = {el:env, y, speed, caught:false};
+    envelopes.push(item);
+
+    function animate() {
+      if (!gameRunning || !env.isConnected) return;
+      y += speed;
+      env.style.top = y + "px";
+
+      const p = $("player").getBoundingClientRect();
+      const e = env.getBoundingClientRect();
+
+      if (!item.caught && e.bottom >= p.top + 8 && e.top <= p.bottom && e.right >= p.left && e.left <= p.right) {
+        item.caught = true;
+        score++;
+        $("score").textContent = score;
+        env.remove();
+        const pop = document.createElement("div");
+        pop.className = "catch-text";
+        pop.textContent = "+1 ♡";
+        pop.style.left = Math.max(8, p.left) + "px";
+        pop.style.top = Math.max(90, p.top - 10) + "px";
+        document.body.appendChild(pop);
+        setTimeout(()=>pop.remove(),600);
+        if (score >= 8) finishGame();
+        return;
+      }
+
+      if (y > window.innerHeight + 30) {
+        env.remove();
+        return;
+      }
+      requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+  }
+
+  function finishGame() {
+    gameRunning = false;
+    clearInterval(spawnTimer);
+    setTimeout(() => {
+      burstHearts(window.innerWidth/2, window.innerHeight/2);
+      setTimeout(()=>show("password"), 700);
+    }, 400);
+  }
+
+  function movePlayer(clientX) {
+    const p = $("player");
+    const half = 46;
+    const x = Math.max(half, Math.min(window.innerWidth-half, clientX));
+    p.style.left = x + "px";
+  }
+  document.addEventListener("pointermove", e => {
+    if ($("game").classList.contains("active")) movePlayer(e.clientX);
+  });
+
+  function checkCode() {
+    const input = $("codeInput").value.trim();
+    if (input === "0115") {
+      burstHearts(window.innerWidth/2, window.innerHeight/2, 28);
+      setTimeout(()=>show("letter"), 850);
+    } else {
+      $("error").textContent = "hmm... that's not it! try again ♡";
+      $("codeInput").animate(
+        [{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],
+        {duration:250}
+      );
+    }
+  }
+
+  $("codeInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") checkCode();
+  });
+
+  function burstHearts(x,y,count=18) {
+    const symbols = ["♡","♥","✦","❤","✧"];
+    for(let i=0;i<count;i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+      h.style.left = x + "px";
+      h.style.top = y + "px";
+      h.style.setProperty("--x", (Math.random()*300-150) + "px");
+      h.style.setProperty("--y", (Math.random()*-330-70) + "px");
+      h.style.setProperty("--r", (Math.random()*80-40) + "deg");
+      h.style.animationDelay = (Math.random()*.25) + "s";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(),2100);
+    }
+  }
+
+  function finishLetter() {
+    burstHearts(window.innerWidth/2, window.innerHeight*.7, 22);
+    setTimeout(() => {
+      show("gift");
+      moreLove();
+    }, 700);
+  }
+
+  function moreLove() {
+    const rain = $("loveRain");
+    for(let i=0;i<100;i++){
+      const el = document.createElement("div");
+      el.className = "i-love-you";
+      el.textContent = "i love you ♡";
+      el.style.top = (Math.random()*92) + "vh";
+      el.style.left = "-140px";
+      el.style.animationDuration = (3.2 + Math.random()*4) + "s";
+      el.style.animationDelay = (Math.random()*1.5) + "s";
+      el.style.fontSize = (12 + Math.random()*9) + "px";
+      rain.appendChild(el);
+      setTimeout(()=>el.remove(),8500);
+    }
+  }
+
+  function restart() {
+    show("intro");
+  }
+</script>
+</body>
+</html>
